@@ -19,6 +19,10 @@ var jumpDirectionUp;
 var vJumpSpeed;
 var vSpeed;
 
+var buildingX;
+var buildingY;
+var buildingCount;
+
 function load(){
 	canvas=document.getElementById("stage");
 	ctx=canvas.getContext("2d");
@@ -31,7 +35,8 @@ function load(){
 	shipX=width/2;
 	shipY=height/2;
 	shipSpeed=0;
-	shipRadius=10;
+	shipRadius = 10;
+	buildingCount = 0;
 
 	jumpActionTime=0;
 	jumpDirectionUp = false;
@@ -51,6 +56,14 @@ function tick() {
         input_key_code[e.keyCode] = false;
     }
 
+    if (buildingCount == 0) {
+        buildingX = width;
+        buildingY = height - 80;
+        buildingCount = 300;
+    }
+    buildingX -= 3;
+    buildingCount--;
+
     if (input_key_code[32] == true) {
         shipSpeed = (shipSpeed > 0 ? -2 : shipSpeed - vSpeed);
     } else {
@@ -65,6 +78,10 @@ function tick() {
     ctx.strokeStyle = 'rgb( 0, 0, 0)';
     ctx.arc(shipX, shipY, shipRadius, 0, Math.PI * 2, true);
     ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgb( 0, 0, 0)';
+    ctx.strokeRect(buildingX, buildingY, 50, height - buildingY);
 }
 
 function stopGame(){
