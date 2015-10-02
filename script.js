@@ -8,16 +8,7 @@ var game;
 var width;
 var height;
 
-var shipX;
-var shipY;
-var shipSpeed;
-var shipRadius;
-
-var jumpActionTime;
-var jumpDirectionUp;
-
-var vJumpSpeed;
-var vSpeed;
+var ship;
 
 var buildingX;
 var buildingY;
@@ -32,16 +23,9 @@ function load(){
 
 	input_key_code = new Array();
 
-	shipX=width/2;
-	shipY=height/2;
-	shipSpeed=0;
-	shipRadius = 10;
+	ship = { x: width / 2, y: height / 2, speed: 0, radius: 10, vSpeed: 0.3 };
+
 	buildingCount = 0;
-
-	jumpActionTime=0;
-	jumpDirectionUp = false;
-
-	vSpeed = 0.3;
 	
 	game=setInterval("tick()",16);
 }
@@ -65,18 +49,18 @@ function tick() {
     buildingCount--;
 
     if (input_key_code[32] == true) {
-        shipSpeed = (shipSpeed > 0 ? -2 : shipSpeed - vSpeed);
+        ship.speed = (ship.speed > 0 ? -2 : ship.speed - ship.vSpeed);
     } else {
-        shipSpeed += vSpeed;
+        ship.speed += ship.vSpeed;
     }
 
-    shipY += shipSpeed;
+    ship.y += ship.speed;
 
-    if (shipY < 20 || shipY > height - 20) stopGame();
+    if (ship.y < 20 || ship.y > height - 20) stopGame();
 
     ctx.beginPath();
     ctx.strokeStyle = 'rgb( 0, 0, 0)';
-    ctx.arc(shipX, shipY, shipRadius, 0, Math.PI * 2, true);
+    ctx.arc(ship.x, ship.y, ship.radius, 0, Math.PI * 2, true);
     ctx.stroke();
 
     ctx.beginPath();
