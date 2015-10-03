@@ -31,11 +31,23 @@ var buildingCount;
 var lollipopData;
 var nextAddLollipopIndex;
 var lollipopCount;
+const lollipopColor = [
+    'rgba(255, 100, 100, 0.7)',
+    'rgba(100, 255, 100, 0.7)',
+    'rgba(100, 100, 255, 0.7)',
+    'rgba(255, 255, 100, 0.7)',
+    'rgba(100, 255, 255, 0.7)',
+    'rgba(255, 100, 255, 0.7)'
+];
 
 function lollipop(upSide) {
     this.x = WIDTH + LOLLIPOP_RADIUS;
     this.upSide = upSide;
     this.isMove = true;
+    this.color = [
+        lollipopColor[Math.floor(Math.random() * lollipopColor.length)],
+        lollipopColor[Math.floor(Math.random() * lollipopColor.length)]
+    ];
 }
 
 function load(){
@@ -153,11 +165,11 @@ function tick() {
         ctx.strokeRect(lollipopData[i].x - 3, 0, 6, lollipopData[i].upSide);
         ctx.strokeRect(lollipopData[i].x - 3, lollipopData[i].upSide + LOLLIPOP_SPACE, 6, HEIGHT - (lollipopData[i].upSide + LOLLIPOP_SPACE));
         ctx.beginPath();
-        ctx.fillStyle = 'rgba(128, 100, 162, 0.7)';
+        ctx.fillStyle = lollipopData[i].color[0];
         ctx.arc(lollipopData[i].x, lollipopData[i].upSide, LOLLIPOP_RADIUS, 0, Math.PI * 2, true);
         ctx.fill();
         ctx.beginPath();
-        ctx.fillStyle = 'rgba(128, 100, 162, 0.7)';
+        ctx.fillStyle = lollipopData[i].color[1];
         ctx.arc(lollipopData[i].x, lollipopData[i].upSide + LOLLIPOP_SPACE, LOLLIPOP_RADIUS, 0, Math.PI * 2, true);
         ctx.fill();
     }
