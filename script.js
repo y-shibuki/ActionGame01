@@ -1,9 +1,17 @@
 const WIDTH = 800;
 const HEIGHT = 560;
 
+const NOMAL_SPEED = 3;
+const HIGH_SPEED = 5;
+
 const BUILDING_NUMBER = 3;
 const BUILDING_WIDTH = 160;
 const BUILDING_INTERVAL = 180;
+
+const LOLLIPOP_NUMBER = 2;
+const LOLLIPOP_RADIUS = 40;
+const LOLLIPOP_SPACE = 160;
+const LOLLIPOP_MIN_SIDE = 160;
 
 var canvas;
 var ctx;
@@ -20,13 +28,23 @@ var buildingData;
 var nextAddBuildingIndex;
 var buildingCount;
 
+var lollipopData;
+var nextAddLollipopIndex;
+var lollipopCount;
+
+function lollipop(upSide) {
+    this.x = WIDTH + LOLLIPOP_RADIUS;
+    this.upSide = upSide;
+    this.isMove = true;
+}
+
 function load(){
     canvas=document.getElementById("stage");
     ctx=canvas.getContext("2d");
 
     input_key_code = new Array();
 
-    ship = { x: WIDTH / 2, y: HEIGHT / 2, speed: 0, radius: 10, vSpeed: 0.3 };
+    ship = { x: WIDTH / 2, y: HEIGHT / 2, speed: 0, radius: 10, vSpeed: 0.35 };
 
     building = {
         high_o: {
@@ -43,9 +61,16 @@ function load(){
 	for (var i = 0; i < BUILDING_NUMBER; i++) {
 	    buildingData[i] = { x: -BUILDING_WIDTH, data: building.high_o };
 	}
-
 	nextAddBuildingIndex = 0;
 	buildingCount = 0;
+
+	lollipopData = new Array(LOLLIPOP_NUMBER);
+	for (var i = 0; i < LOLLIPOP_NUMBER; i++) {
+	    lollipopData[i] = new lollipop(0);
+	    lollipopData[i].isMove = false;
+	}
+	nextAddLollipopIndex = 0;
+	lollipopCount = 0;
 	
 	game=setInterval("tick()",16);
 }
@@ -68,14 +93,26 @@ function tick() {
                 break;
         }
         buildingCount = BUILDING_INTERVAL;
-        nextAddBuildingIndex = (nextAddBuildingIndex + 1) % 3;
+        nextAddBuildingIndex = (nextAddBuildingIndex + 1) % BUILDING_NUMBER;
     }
     for (var i = 0; i < BUILDING_NUMBER; i++) {
         if (buildingData[i].x > -BUILDING_WIDTH) {
-            buildingData[i].x -= 3;
+            buildingData[i].x -= NOMAL_SPEED;
         }
     }
     buildingCount--;
+
+    //***ÉçÉäÉ|ÉbÉv***//
+    if (lollipopCount == 0) {
+        var upSide = Math.floor(Math.random() * (HEIGHT - LOLLIPOP_SPACE - LOLLIPOP_MIN_SIDE * 2) + LOLLIPOP_MIN_SIDE);
+        lollipopData[nextAddLollipopIndex] = new lollipop(upSide);
+        lollipopCount = Math.floor(WIDTH / 2 / NOMAL_SPEED);
+        nextAddLollipopIndex = (nextAddLollipopIndex + 1) % LOLLIPOP_NUMBER;
+    }
+    for (var i = 0; i < LOLLIPOP_NUMBER; i++) {
+        lollipopData[i].x -= (lollipopData[i].isMove == true ? NOMAL_SPEED : 0);
+    }
+    lollipopCount--;
 
     //***à⁄ìÆèàóù***//
     if (input_key_code[32] == true) {
@@ -97,6 +134,20 @@ function tick() {
         ctx.beginPath();
         ctx.strokeStyle = 'rgb( 0, 0, 0)';
         ctx.strokeRect(buildingData[i].x, buildingData[i].data.y, BUILDING_WIDTH, HEIGHT - buildingData[i].data.y);
+    }
+    for (var i = 0; i < LOLLIPOP_NUMBER; i++) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgb( 0, 0, 0)';
+        ctx.strokeRect(lollipopData[i].x - 3, 0, 6, lollipopData[i].upSide);
+        ctx.strokeRect(lollipopData[i].x - 3, lollipopData[i].upSide + LOLLIPOP_SPACE, 6, HEIGHT - (lollipopData[i].upSide + LOLLIPOP_SPACE));
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(128, 100, 162, 0.7)';
+        ctx.arc(lollipopData[i].x, lollipopData[i].upSide, LOLLIPOP_RADIUS, 0, Math.PI * 2, true);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(128, 100, 162, 0.7)';
+        ctx.arc(lollipopData[i].x, lollipopData[i].upSide + LOLLIPOP_SPACE, LOLLIPOP_RADIUS, 0, Math.PI * 2, true);
+        ctx.fill();
     }
 }
 
