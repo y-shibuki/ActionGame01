@@ -124,6 +124,18 @@ function tick() {
 
     //****“–‚½‚è”»’è***//
     if (ship.y < 20 || ship.y > HEIGHT - 20) stopGame();
+    for (var i = 0; i < LOLLIPOP_NUMBER; i++) {
+        if((lollipopData[i].x-ship.x)*(lollipopData[i].x-ship.x)+
+            (lollipopData[i].upSide-ship.y)*(lollipopData[i].upSide-ship.y) <
+             (ship.radius + LOLLIPOP_RADIUS) * (ship.radius + LOLLIPOP_RADIUS)) {
+            stopGame();
+        }
+        if ((lollipopData[i].x - ship.x) * (lollipopData[i].x - ship.x) +
+            (lollipopData[i].upSide + LOLLIPOP_SPACE - ship.y) * (lollipopData[i].upSide + LOLLIPOP_SPACE - ship.y) <
+             (ship.radius + LOLLIPOP_RADIUS) * (ship.radius + LOLLIPOP_RADIUS)) {
+            stopGame();
+        }
+    }
 
     //***•`‰æ***//
     ctx.beginPath();
