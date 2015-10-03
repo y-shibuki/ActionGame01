@@ -9,8 +9,8 @@ const BUILDING_WIDTH = 160;
 const BUILDING_INTERVAL = 180;
 
 const LOLLIPOP_NUMBER = 2;
-const LOLLIPOP_RADIUS = 40;
-const LOLLIPOP_SPACE = 160;
+const LOLLIPOP_RADIUS = 48;
+const LOLLIPOP_SPACE = 200;
 const LOLLIPOP_MIN_SIDE = 160;
 
 var canvas;
@@ -56,7 +56,7 @@ function load(){
 
     input_key_code = new Array();
 
-    ship = { x: WIDTH / 2, y: HEIGHT / 2, speed: 0, radius: 10, vSpeed: 0.35 };
+    ship = { x: WIDTH / 2, y: HEIGHT / 2, speed: 0, radius: 10, vSpeed: 0.4 };
 
     building = {
         high_o: {
